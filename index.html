@@ -396,8 +396,107 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// --------------------------------------------------------------------------------
+// 1. SUPABASE INTEGRATION START
+// --------------------------------------------------------------------------------
+
+// IMPORTANT: REPLACE THESE WITH YOUR ACTUAL SUPABASE KEYS!
+const SUPABASE_URL = 'https://sbthvusuujryxhmvmiai.supabase.co'; 
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNidGh2dXN1dWpyeXhobXZtaWFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwMTAzOTgsImV4cCI6MjA4MDU4NjM5OH0.6cxPKY78RNZlaPs3hqEtYQ-9M9kyzYEAmDEvc2wjln8'; 
+
+// Initialize Supabase Client
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
+/**
+ * Fetches products from the Supabase 'Product' table, filtered by market.
+ */
+async function fetchProducts(marketIdentifier) {
+    try {
+        const { data, error } = await supabase
+            .from('Product')
+            .select('name, price, image_url') 
+            .eq('market', marketIdentifier); // Filter based on the market ID
+
+        if (error) {
+            console.error('Error fetching data for market:', marketIdentifier, error);
+            return null; 
+        }
+
+        return data; 
+    } catch (err) {
+        console.error('Network or client error:', err);
+        return null;
+    }
+}
+
+/**
+ * Creates the HTML structure for displaying the products.
+ */
+function createProductHtml(products) {
+    if (!products || products.length === 0) {
+        return '<p style="padding:15px;">No products found for this market.</p>';
+    }
+
+    let html = '<div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 15px;">';
+
+    products.forEach(product => {
+        html += `
+            <div style="width: 250px; background: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <img src="${product.image_url}" alt="${product.name}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px 8px 0 0;">
+                <div style="padding: 15px;">
+                    <h3 style="margin-top: 0; font-size: 1.2rem;">${product.name}</h3>
+                    <p style="color: #4CAF50; font-weight: bold;">RWF ${product.price ? product.price.toLocaleString() : 'N/A'}</p>
+                    <button class="btn" style="width: 100%; margin-top: 10px;">Add to Cart</button>
+                </div>
+            </div>
+        `;
+    });
+
+    html += '</div>';
+    return html;
+}
+
+// --------------------------------------------------------------------------------
+// 2. DOM EVENT LISTENER
+// --------------------------------------------------------------------------------
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleLinks = document.querySelectorAll('.market-toggle');
+    
+    toggleLinks.forEach(link => {
+        link.addEventListener('click', async function(event) { // Make the function async
+            event.preventDefault(); 
+            
+            const marketCard = this.closest('.market-card');
+            const container = marketCard.querySelector('.market-content');
+            const icon = this.querySelector('.toggle-icon');
+            const marketIdentifier = this.getAttribute('data-market-identifier');
+
+            // Check if products have already been loaded
+            const isContentHidden = container.classList.contains('hidden-products');
+
+            // 1. Fetch data only if the container is being opened and hasn't been loaded
+            if (isContentHidden && container.innerHTML.includes('Loading')) {
+                // Show loading state while fetching
+                container.innerHTML = '<p style="padding:15px;">Fetching products from server...</p>';
+
+                const products = await fetchProducts(marketIdentifier);
+                
+                // 2. Render HTML into the container
+                container.innerHTML = createProductHtml(products);
+            }
+            
+            // 3. Toggle the visibility and icon rotation
+            container.classList.toggle('visible-products');
+            container.classList.toggle('hidden-products');
+            icon.classList.toggle('rotated');
+        });
+    });
+});
+</script>
 </body>
 </html>
 
