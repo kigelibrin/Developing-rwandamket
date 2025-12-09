@@ -413,14 +413,33 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 /**
  * Fetches products from the Supabase 'Product' table, filtered by market.
  */
-async function fetchProducts(marketIdentifier) {
+async function getHomeDecorProducts() {
     try {
-        const { data, error } = await supabase
+        const { data: products, error } = await supabase
             .from('Product')
             .select('name, price, image_url') 
-            .eq('market', marketIdentifier); // Filter based on the market ID
+            .eq('market', 'RWANDAMKET Home Decor'); // Filter based on the market ID
 
         if (error) {
+            console.error('Error fetching data for market:', marketIdentifier, error);
+            return null; 
+        }
+
+        return data; 
+    } catch (err) {
+        console.error('Network or client error:', err);
+        return null;
+    }
+}
+
+
+  async function getEventsProducts() {
+  const { data: products, error } = await supabase
+    .from('Product')
+    .select('*')
+    .eq('market', 'RWANDAMKET Events Management');
+
+    if (error) {
             console.error('Error fetching data for market:', marketIdentifier, error);
             return null; 
         }
