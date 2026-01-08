@@ -98,7 +98,6 @@ async function renderItems(marketId, marketName, whatsapp) {
 
         if (error) throw error;
 
-        // Reset Header
         list.innerHTML = `
             <div style="margin-bottom:20px; display:flex; align-items:center; gap:10px; width:100%;">
                 <button onclick="renderMarkets()" style="background:#eee; border:none; padding:8px 12px; border-radius:10px; font-weight:bold; cursor:pointer;">← Back</button>
@@ -115,13 +114,14 @@ async function renderItems(marketId, marketName, whatsapp) {
             const itemCard = document.createElement('div');
             itemCard.className = 'market-card';
 
-            // SAFETY: Check if the chef is premium (Add an 'is_premium' column in Supabase later)
-            const badge = item.is_premium ? `<span style="background:#FFD700; color:#000; font-size:0.6rem; padding:2px 5px; border-radius:4px; font-weight:bold; display:inline-block; margin-bottom:4px;">VERIFIED</span>` : '';
+            // SAFETY CHECK: Only show badge if 'is_premium' column exists and is true
+            const isPremium = item.hasOwnProperty('is_premium') && item.is_premium;
+            const badge = isPremium ? `<span style="background:#FFD700; color:#000; font-size:0.6rem; padding:2px 5px; border-radius:4px; font-weight:bold; display:inline-block; margin-bottom:4px;">VERIFIED</span>` : '';
 
             itemCard.innerHTML = `
                 <div style="display:flex; align-items:center; gap:15px; width:100%;">
                     <img src="${item.image_url}" 
-                         onerror="this.src='https://via.placeholder.com/150?text=Image+Error'" 
+                         onerror="this.src='https://via.placeholder.com/150?text=Rwandamket'" 
                          style="width:70px; height:70px; border-radius:12px; object-fit:cover;">
                     <div style="flex:1;">
                         ${badge}
@@ -143,8 +143,8 @@ async function renderItems(marketId, marketName, whatsapp) {
             list.appendChild(itemCard);
         });
     } catch (e) {
-        console.error("The error is:", e); // This shows the real error in your browser console
-        list.innerHTML = "<p style='text-align:center; color:red;'>Error loading items. Check your internet or code.</p>";
+        console.error("The error is:", e);
+        list.innerHTML = "<p style='text-align:center; color:red; padding:20px;'>Connection error. Please refresh.</p>";
     }
 }
 // --- 4. FILTER & CART LOGIC ---
