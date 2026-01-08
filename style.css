@@ -1,0 +1,502 @@
+/* --- 1. VARIABLES & RESET --- */
+:root {
+    --primary: #2E7D32; /* Deep Eco-Green */
+    --primary-dark: #1b5e20;
+    --accent: #4CAF50;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --bg-light: #f8f9fa;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* --- 2. HEADER & NAVIGATION --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+header h1 {
+    font-size: 1.2rem;
+    color: var(--primary);
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+    background-color: var(--primary-dark);
+}
+
+/* Pulse Animation for Header Button */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+header .btn-primary {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+/* --- 3. HERO & ABOUT SECTION --- */
+.hero {
+    position: relative;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                      url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200');
+    background-size: cover;
+    background-position: center;
+}
+
+.text-green { color: var(--accent); }
+
+.section-container {
+    padding: 40px 20px;
+}
+
+.bg-light { background-color: var(--bg-light); }
+
+.about-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.about-text h2 {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+
+.about-image img {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+/* --- 4. SEARCH & FILTERS --- */
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.category-wrapper {
+    overflow-x: auto;
+    padding: 10px 0;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.category-scroll {
+    display: flex;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+.filter-chip {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.filter-chip.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* --- 5. MARKET LIST GRID --- */
+.markets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.market-card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.market-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.price-tag {
+    display: block;
+    color: var(--primary);
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+/* --- 6. SHOPPING CART BAR --- */
+.cart-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 15px;
+    right: 15px;
+    background: var(--primary-dark);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    z-index: 2000;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cart-bar.hidden {
+    transform: translateY(150%);
+}
+
+.checkout-btn {
+    background: white;
+    color: var(--primary-dark);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* --- 7. FOOTER --- */
+.footer {
+    text-align: center;
+    padding: 40px 20px 100px; /* Extra padding for cart bar space */
+    background: #f1f1f1;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* --- 8. DESKTOP ADAPTATION --- */
+@media (min-width: 768px) {
+    .about-grid {
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+    }
+    
+    .markets-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px;
+        padding: 40px;
+    }
+}
+/* style.css final touches */
+
+/* Smooth scrolling for the whole page */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Prevent horizontal scroll on the whole page */
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Make images load with a fade-in effect */
+img {
+    transition: opacity 0.3s ease;
+    background-color: #f0f0f0; /* Shows a light grey box while loading */
+}
+
+/* Highlight the search bar when focused */
+#marketSearch:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+/* Add this to the bottom of your style.css */
+@media (min-width: 1024px) {
+    header {
+        padding: 20px 10%; /* Adds more space on the sides for wide monitors */
+    }
+    
+    .hero-content h1 {
+        font-size: 3.5rem; /* Makes the headline bigger on big screens */
+    }
+}
+
+/* style.css */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-logo {
+    height: 40px; /* Adjust this to make it look right on your phone */
+    width: auto;
+    border-radius: 50%; /* Makes your circular logo look clean */
+}
+
+.logo-text {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+
+.market-card {
+    display: flex;
+    flex-direction: column; /* Stacks image on top of text */
+    height: auto; /* Allows card to grow with the text */
+    min-height: 250px; 
+    overflow: hidden;
+}
+
+.market-card h4 {
+    margin-top: 10px;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.market-card p {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.faq-item {
+    border-bottom: 1px solid #eee;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* style.css */
+
+.faq-answer {
+    display: none; /* Keep hidden initially */
+    padding: 0 20px 20px;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    /* Optional: adds a fade-in effect */
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.faq-question {
+    /* Ensure the button takes up the full width so the click area is big */
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+/* style.css */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 3000; /* Sits on top of everything */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7); /* Dark background overlay */
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.terms-body p {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+/* style.css */
+
+/* Dark Theme Variables */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.dark-mode header {
+    background: #1e1e1e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.dark-mode .bg-light, 
+.dark-mode .market-card, 
+.dark-mode .modal-content,
+.dark-mode .faq-item {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-color: #333;
+}
+
+.dark-mode .logo-text, 
+.dark-mode .about-text h2,
+.dark-mode .faq-question {
+    color: #4CAF50; /* A brighter green for dark mode visibility */
+}
+
+.dark-mode .market-card p,
+.dark-mode .faq-answer {
+    color: #bbb;
+}
+
+.dark-mode #marketSearch {
+    background: #2a2a2a;
+    color: white;
+    border: 1px solid #444;
+}
+
+/* Toggle Button Styling */
+.theme-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Tightens space between icons */
+}
+
+.theme-btn {
+    background: #f0f0f0;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.dark-mode .theme-btn {
+    background: #333;
+}
+
+/* style.css */
+
+@media (max-width: 400px) {
+    .logo-text {
+        display: none; /* Hides text on small phones */
+    }
+    
+    .header-logo {
+        height: 35px; /* Slightly smaller logo for small screens */
+    }
+    
+    .header-actions {
+        gap: 5px; /* Even tighter spacing */
+    }
+
+    .btn-primary {
+        padding: 8px 15px; /* Smaller button padding */
+        font-size: 0.8rem;
+    }
+}
+
+/* style.css */
+@media (min-width: 1024px) {
+    .cart-bar {
+        width: 400px;    /* Makes the cart a nice small box on laptops */
+        left: auto;      /* Removes the left stretch */
+        right: 30px;     /* Places it neatly in the bottom right corner */
+        bottom: 30px;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* style.css */
+@media (min-width: 1024px) {
+    .cart-bar {
+        width: 350px;      /* Fixed width so it looks like a widget */
+        left: auto;        /* Unlocks it from the left side */
+        right: 40px;       /* Pins it to the bottom right */
+        bottom: 40px;      /* Lifts it slightly off the edge */
+        border-radius: 20px;
+        padding: 20px;
+    }
+}
