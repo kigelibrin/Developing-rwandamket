@@ -98,7 +98,7 @@ async function renderItems(marketId, marketName, whatsapp) {
 
         if (error) throw error;
 
-        // Header with Back Button
+        // Reset Header
         list.innerHTML = `
             <div style="margin-bottom:20px; display:flex; align-items:center; gap:10px; width:100%;">
                 <button onclick="renderMarkets()" style="background:#eee; border:none; padding:8px 12px; border-radius:10px; font-weight:bold; cursor:pointer;">← Back</button>
@@ -112,24 +112,26 @@ async function renderItems(marketId, marketName, whatsapp) {
         }
 
         items.forEach(item => {
-            // Inside your items.forEach(item => { ... }) loop:
+            const itemCard = document.createElement('div');
+            itemCard.className = 'market-card';
 
-itemCard.innerHTML = `
-    <div style="display:flex; align-items:center; gap:15px; width:100%; padding:10px; background:#1a1a1a; border-radius:12px;">
-        <div style="width:70px; height:70px; background:#2D7A41; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-            <img src="${item.image_url}" 
-                 onerror="this.src='https://via.placeholder.com/70?text=Error'" 
-                 style="width:100%; height:100%; object-fit:cover;">
-        </div>
-        <div style="flex:1;">
-            <h4 style="margin:0; font-size:0.9rem; color:white;">${item.name}</h4>
-            <span class="price-tag" style="color:#4CAF50;">${item.price} RWF</span>
-        </div>
-        <button class="btn-primary add-to-cart-btn" style="padding:8px 12px; font-size:0.7rem;">Order</button>
-    </div>
-`;
+            // SAFETY: Check if the chef is premium (Add an 'is_premium' column in Supabase later)
+            const badge = item.is_premium ? `<span style="background:#FFD700; color:#000; font-size:0.6rem; padding:2px 5px; border-radius:4px; font-weight:bold; display:inline-block; margin-bottom:4px;">VERIFIED</span>` : '';
+
+            itemCard.innerHTML = `
+                <div style="display:flex; align-items:center; gap:15px; width:100%;">
+                    <img src="${item.image_url}" 
+                         onerror="this.src='https://via.placeholder.com/150?text=Image+Error'" 
+                         style="width:70px; height:70px; border-radius:12px; object-fit:cover;">
+                    <div style="flex:1;">
+                        ${badge}
+                        <h4 style="margin:0; font-size:0.9rem;">${item.name}</h4>
+                        <span class="price-tag">${item.price} RWF</span>
+                    </div>
+                    <button class="btn-primary add-to-cart-btn" style="padding:8px 12px; font-size:0.7rem;">Order</button>
+                </div>
+            `;
             
-            // Cart Logic
             const orderBtn = itemCard.querySelector('.add-to-cart-btn');
             orderBtn.onclick = (e) => {
                 e.stopPropagation();
@@ -141,11 +143,10 @@ itemCard.innerHTML = `
             list.appendChild(itemCard);
         });
     } catch (e) {
-        console.error(e);
-        list.innerHTML = "<p>Error loading items.</p>";
+        console.error("The error is:", e); // This shows the real error in your browser console
+        list.innerHTML = "<p style='text-align:center; color:red;'>Error loading items. Check your internet or code.</p>";
     }
 }
-
 // --- 4. FILTER & CART LOGIC ---
 function filterMarkets() {
     const activeChip = document.querySelector('.filter-chip.active');
