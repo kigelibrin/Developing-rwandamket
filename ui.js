@@ -112,18 +112,22 @@ async function renderItems(marketId, marketName, whatsapp) {
         }
 
         items.forEach(item => {
-            const itemCard = document.createElement('div');
-            itemCard.className = 'market-card';
-            itemCard.innerHTML = `
-                <div style="display:flex; align-items:center; gap:15px; width:100%;">
-                    <img src="${item.image_url}" onerror="this.src='https://via.placeholder.com/150'" style="width:70px; height:70px; border-radius:12px; object-fit:cover;">
-                    <div style="flex:1;">
-                        <h4 style="margin:0; font-size:0.9rem;">${item.name}</h4>
-                        <span class="price-tag">${item.price}</span>
-                    </div>
-                    <button class="btn-primary add-to-cart-btn" style="padding:8px 12px; font-size:0.7rem;">Order</button>
-                </div>
-            `;
+            // Inside your items.forEach(item => { ... }) loop:
+
+itemCard.innerHTML = `
+    <div style="display:flex; align-items:center; gap:15px; width:100%; padding:10px; background:#1a1a1a; border-radius:12px;">
+        <div style="width:70px; height:70px; background:#2D7A41; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+            <img src="${item.image_url}" 
+                 onerror="this.src='https://via.placeholder.com/70?text=Error'" 
+                 style="width:100%; height:100%; object-fit:cover;">
+        </div>
+        <div style="flex:1;">
+            <h4 style="margin:0; font-size:0.9rem; color:white;">${item.name}</h4>
+            <span class="price-tag" style="color:#4CAF50;">${item.price} RWF</span>
+        </div>
+        <button class="btn-primary add-to-cart-btn" style="padding:8px 12px; font-size:0.7rem;">Order</button>
+    </div>
+`;
             
             // Cart Logic
             const orderBtn = itemCard.querySelector('.add-to-cart-btn');
